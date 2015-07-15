@@ -1,14 +1,20 @@
-# Investigating the exponential distribution and comparison with the CLT
+# Investigating the exponential distribution
 Leon Duplay  
 15 July 2015  
 
 ### Overview
 
-In this document, we will investigate the exponential distribution in R and comparie it with the Central Limit Theorem.
+In this document, we will investigate the exponential distribution in R and compare it with the Central Limit Theorem. The probability density function of an exponential distribution is defined as f(x,l) = l*e^-lx. One key feature of the exponential distribution is that both the mean and standard deviation correspond to `1/lambda`.
+
+In order to investigate the exponential distribution in R, we will simulate data and perform the following tasks:
+
+1. Analyze the sample mean and compare it to the theoretical mean of the distribution according to its definition.
+2. Analyze how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
+3. Demonstrate that the distribution is approximately normal, focusing on the difference between the distribution of a large collection of random exponentials and the distribution of a large collection of averages of 40 exponentials.
 
 ### Simulations
 
-Blarg
+In this first part, we will simulate the needed data using `rexp(n, lambda)`. We fix the value `lambda = 0.2`, and start with `n = 40` simulated exponetial distributions.
 
 ### Sample Mean versus Theoretical Mean
 
@@ -21,7 +27,14 @@ Include figures (output from R) with titles. Highlight the variances you are com
 ### Distribution
 
 Via figures and text, explain how one can tell the distribution is approximately normal.
-Overlay a normal distribution
+
+
+
+vs
+
+mns = NULL
+for (i in 1 : 1000) mns = c(mns, mean(runif(40)))
+hist(mns)
 
 ### Project definition
 
@@ -32,7 +45,7 @@ Illustrate via simulation and associated explanatory text the properties of the 
 2. Show how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
 3. Show that the distribution is approximately normal.
 
-In point 3, focus on the difference between the distribution of a large collection of random exponentials and the distribution of a large collection of averages of 40 exponentials. 
+In point 3, 
 
 Now in the second portion of the class, we're going to analyze the ToothGrowth data in the R datasets package. 
 Load the ToothGrowth data and perform some basic exploratory data analyses 
