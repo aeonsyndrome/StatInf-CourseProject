@@ -2,9 +2,9 @@
 Leon Duplay  
 15 July 2015  
 
-### Overview
+## Overview
 
-In this document, we will investigate the exponential distribution in R and compare it with the Central Limit Theorem. The probability density function of an exponential distribution is defined as f(x,l) = l*e^-lx. One key feature of the exponential distribution is that both the mean and standard deviation correspond to `1/lambda`.
+In this document, we will investigate the exponential distribution in R using the Central Limit Theorem. The probability density function of an exponential distribution is defined as f(x,l) = l*e^-lx. One key feature of the exponential distribution is that both the mean and standard deviation correspond to `1/lambda`.
 
 In order to investigate the exponential distribution in R, we will simulate data and perform the following tasks:
 
@@ -12,23 +12,25 @@ In order to investigate the exponential distribution in R, we will simulate data
 2. Analyze how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
 3. Demonstrate that the distribution is approximately normal, focusing on the difference between the distribution of a large collection of random exponentials and the distribution of a large collection of averages of 40 exponentials.
 
-### Simulations
+## Simulations
 
-In this first part, we will simulate the needed data using `rexp(n, lambda)`. We fix the value `lambda = 0.2`, and start with `n = 40` simulated exponetial distributions.
+In this first part, we will simulate the needed data using `rexp(n, lambda)`. We fix the value `lambda = 0.2`, and start with `n = 40` exponentials. We will perform `sims = 1000` experiments.
 
-### Sample Mean versus Theoretical Mean
+## Sample Mean versus Theoretical Mean
 
 Include figures with titles. In the figures, highlight the means you are comparing. Include text that explains the figures and what is shown on them, and provides appropriate numbers.
 
-### Sample Variance versus Theoretical Variance
+## Sample Variance versus Theoretical Variance
 
 Include figures (output from R) with titles. Highlight the variances you are comparing. Include text that explains your understanding of the differences of the variances.
 
-### Distribution
+## Distribution
 
-Via figures and text, explain how one can tell the distribution is approximately normal.
+Via figures and text, explain how one can tell the distribution is approximately normal. focusing on the difference between the distribution of a large collection of random exponentials and the distribution of a large collection of averages of 40 exponentials.
 
 
+
+hist(runif(1000))
 
 vs
 
