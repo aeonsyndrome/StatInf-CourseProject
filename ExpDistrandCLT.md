@@ -4,7 +4,7 @@ Leon Duplay
 
 ## Overview
 
-In this document, we will investigate the exponential distribution in R using the Central Limit Theorem. The probability density function of an exponential distribution is defined as f(x,l) = l*e^-lx. One key feature of the exponential distribution is that both the mean and standard deviation correspond to `1/lambda`.
+In this document, we will investigate the exponential distribution in R using the Central Limit Theorem. The probability density function of an exponential distribution is defined as f(x,l) = l*e^-lx for x>0. One key feature of the exponential distribution is that both the mean and standard deviation correspond to `1/lambda`.
 
 In order to investigate the exponential distribution in R, we will simulate data and perform the following tasks:
 
@@ -12,11 +12,50 @@ In order to investigate the exponential distribution in R, we will simulate data
 2. Analyze how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
 3. Demonstrate that the distribution is approximately normal, focusing on the difference between the distribution of a large collection of random exponentials and the distribution of a large collection of averages of 40 exponentials.
 
+Below you can see an example of the exponential distribution probability density function:
+
+
+```r
+# Show a demo of the exponential distribution
+library(ggplot2)
+x <- seq(0.0,10.0,0.01)
+qplot(x,dexp(x,0.2),geom="line",xlab="x", ylab="exp_dis(x)",main="Exponential distribution example for lambda = 0.2")
+```
+
+<img src="ExpDistrandCLT_files/figure-html/demo-1.png" title="" alt="" style="display: block; margin: auto;" />
+
 ## Simulations
 
-In this first part, we will simulate the needed data using `rexp(n, lambda)`. We fix the value `lambda = 0.2`, and start with `n = 40` exponentials. We will perform `sims = 1000` experiments.
+In this first part, we will simulate the needed data using `rexp(n, lambda)`. We fix the value `lambda = 0.2`, and start with `n = 40` samples. We will perform `nosims = 1000` experiments. As explained above, the theoretical mean and standard deviation of the distribution is 1/lambda, i.e. 5.
+
+
+```r
+# Initialize parameters
+set.seed(7355608)
+nosims <- 1000
+n <- 40
+lambda <- 0.2
+mean_theorical <- 1/lambda
+sd_theorical <- 1/lambda
+
+# Simulation
+means_simulated <- NULL
+for (i in 1: nosims) {
+        means_simulated <- c(means_simulated, mean(rexp(n, lambda)))
+}
+```
+
+
 
 ## Sample Mean versus Theoretical Mean
+
+According to the Central Limit Theorem, with our large number of simulations (1000), we can say: $$\frac{\mbox{Estimate} - \mbox{Mean of Estimate}}{\mbox{Std. Err. of Estimate}} = \frac{\bar X_n - \mu}{\sigma / \sqrt{n}}=\frac{\sqrt n (\bar X_n - \mu)}{\sigma} \longrightarrow N(0, 1)$$
+
+This translates to the distribution of the sample mean $\bar X_n$ is approximately $N(\mu, \sigma^2/n)$
+	- distribution is centered at the population mean
+	- with standard deviation = standard error of the mean
+
+`insert figures here`
 
 Include figures with titles. In the figures, highlight the means you are comparing. Include text that explains the figures and what is shown on them, and provides appropriate numbers.
 
@@ -38,16 +77,7 @@ mns = NULL
 for (i in 1 : 1000) mns = c(mns, mean(runif(40)))
 hist(mns)
 
-### Project definition
 
-In this project you will investigate the exponential distribution in R and compare it with the Central Limit Theorem. The exponential distribution can be simulated in R with rexp(n, lambda) where lambda is the rate parameter. The mean of exponential distribution is 1/lambda and the standard deviation is also 1/lambda. Set lambda = 0.2 for all of the simulations. You will investigate the distribution of averages of 40 exponentials. Note that you will need to do a thousand simulations.
-
-Illustrate via simulation and associated explanatory text the properties of the distribution of the mean of 40 exponentials.  You should
-1. Show the sample mean and compare it to the theoretical mean of the distribution.
-2. Show how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
-3. Show that the distribution is approximately normal.
-
-In point 3, 
 
 Now in the second portion of the class, we're going to analyze the ToothGrowth data in the R datasets package. 
 Load the ToothGrowth data and perform some basic exploratory data analyses 
@@ -59,3 +89,39 @@ Did you  perform an exploratory data analysis of at least a single plot or table
 Did the student perform some relevant confidence intervals and/or tests?
 Were the results of the tests and/or intervals interpreted in the context of the problem correctly? 
 Did the student describe the assumptions needed for their conclusions?
+
+## Appendix
+
+This analysis was completed with the below system:
+
+
+```r
+sessionInfo()
+```
+
+```
+## R version 3.1.3 (2015-03-09)
+## Platform: x86_64-w64-mingw32/x64 (64-bit)
+## Running under: Windows 7 x64 (build 7601) Service Pack 1
+## 
+## locale:
+## [1] LC_COLLATE=English_United Kingdom.1252 
+## [2] LC_CTYPE=English_United Kingdom.1252   
+## [3] LC_MONETARY=English_United Kingdom.1252
+## [4] LC_NUMERIC=C                           
+## [5] LC_TIME=English_United Kingdom.1252    
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] ggplot2_1.0.1
+## 
+## loaded via a namespace (and not attached):
+##  [1] colorspace_1.2-6 digest_0.6.8     evaluate_0.7     formatR_1.2     
+##  [5] grid_3.1.3       gtable_0.1.2     htmltools_0.2.6  knitr_1.10.5    
+##  [9] labeling_0.3     magrittr_1.5     MASS_7.3-42      munsell_0.4.2   
+## [13] plyr_1.8.3       proto_0.3-10     Rcpp_0.11.6      reshape2_1.4.1  
+## [17] rmarkdown_0.7    scales_0.2.5     stringi_0.5-5    stringr_1.0.0   
+## [21] tools_3.1.3      yaml_2.1.13
+```
