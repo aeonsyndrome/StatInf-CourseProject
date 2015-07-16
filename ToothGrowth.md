@@ -4,7 +4,7 @@ Leon Duplay
 
 ## Overview
 
-In this document, we will investigate the ToothGrowth by performing some basic exploratory data analysis and some statistical inference. By using confidence intervals and/or hypothesis tests to compare tooth growth by `supp` and `dose`, we will study the impact of these two variables on tooth growth and present our conclusions, including the assumptions made.
+In this document, we will investigate the ToothGrowth dataset by performing some basic exploratory data analysis and some statistical inference. By using confidence intervals and/or hypothesis tests to compare tooth growth by `supp` and `dose`, we will study the impact of these two variables on tooth growth and present our conclusions, including the assumptions made.
 
 ## Exploring the dataset
 
@@ -61,79 +61,12 @@ Looking at both variables together gives an interesting insight: it seems that a
 
 ## Confidence Intervals and Hypothesis Testing
 
-The next two sections are for analyzing the data for correlation between the delivery method (Dosage and Supplement) and change in tooth growth. 
-
-### 3.1 Dosage as a Factor
+The objective of this section is to use confidence intervals and hypothesis testing to prove or disprove the null hypothesis (dosage/supplement have no impact on teeth length). To do so, we will use unpaired T-tests between factors of `dose` and `supp`.
 
 
 ```r
-    dose1 <- subset(ToothGrowth, dose %in% c(0.5, 1.0))
-    dose2 <- subset(ToothGrowth, dose %in% c(0.5, 2.0))
-    dose3 <- subset(ToothGrowth, dose %in% c(1.0, 2.0))
-    t.test(len ~ dose, paired = F, var.equal = F, data = dose1)
-```
-
-```
-## 
-## 	Welch Two Sample t-test
-## 
-## data:  len by dose
-## t = -6.4766, df = 37.986, p-value = 1.268e-07
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  -11.983781  -6.276219
-## sample estimates:
-## mean in group 0.5   mean in group 1 
-##            10.605            19.735
-```
-
-
-```r
-    t.test(len ~ dose, paired = F, var.equal = F, data = dose2)
-```
-
-```
-## 
-## 	Welch Two Sample t-test
-## 
-## data:  len by dose
-## t = -11.799, df = 36.883, p-value = 4.398e-14
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  -18.15617 -12.83383
-## sample estimates:
-## mean in group 0.5   mean in group 2 
-##            10.605            26.100
-```
-
-
-```r
-    t.test(len ~ dose, paired = F, var.equal = F, data = dose3)
-```
-
-```
-## 
-## 	Welch Two Sample t-test
-## 
-## data:  len by dose
-## t = -4.9005, df = 37.101, p-value = 1.906e-05
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  -8.996481 -3.733519
-## sample estimates:
-## mean in group 1 mean in group 2 
-##          19.735          26.100
-```
-
-The confidence intervals ([-11.98, -6.276] for doses 0.5 and 1.0, [-18.16, -12.83] for doses 0.5 and 2.0, and [-8.996, -3.734] for doses 1.0 and 2.0) allow for the rejection of the null hypothesis and a confirmation that there is a significant correlation between tooth length and dose levels.
-
-### 3.2 Supplement as a Factor
-
-Analyzing the data for correlation between the delivery method and change in tooth growth:
-
-
-```r
-    t.test(len ~ supp, paired = F, var.equal = F, data = ToothGrowth)
+tt <- t.test(len ~ supp, paired = F, var.equal = F, data = ToothGrowth)
+tt
 ```
 
 ```
@@ -150,24 +83,29 @@ Analyzing the data for correlation between the delivery method and change in too
 ##         20.66333         16.96333
 ```
 
-A confidence interval of [-0.171, 7.571] does not allow us to reject the null hypothesis (that there is no correlation between delivery method and tooth length).
+In this T-test testing for supplements, while the means are different **(20.66, 16.96)**, we cannot disprove the null hypothesis as the probability under the null hypothesis of obtaining these means is over 5% (p value is **0.061**). Therefore, we can conclude that supplement type **does NOT** have a statistically significant impact on teeth length within the given sample.
 
-## 4. Conclusions and Assumptions
+In order to use T tests on the `dose`, we must split the dataset into pairs of dosages.
 
-### 4.1 Assumptions
 
-In order to make conclusions with the data in this dataset, we must assume the following:
+```r
+    dose1 <- subset(ToothGrowth, dose %in% c(0.5, 1.0))
+    dose2 <- subset(ToothGrowth, dose %in% c(0.5, 2.0))
+    dose3 <- subset(ToothGrowth, dose %in% c(1.0, 2.0))
+    t1 <- t.test(len ~ dose, paired = F, var.equal = F, data = dose1)
+    t2 <- t.test(len ~ dose, paired = F, var.equal = F, data = dose2)
+    t3 <- t.test(len ~ dose, paired = F, var.equal = F, data = dose3)
+```
 
-1. The poplulations are independent, the variances between populations are different and a random population was used
-2. The population was comprised of similar guinea pigs, measurement error was accounted for with significant digits, and double blind research methods were used. 
-3. For the populations to be independent, 60 guinea pigs would have to be used so each combination of dose level and delivery method were not affected by the other methods. 
-4. To ensure double blind research methods are followed, the researchers taking the measurements must have been unaware of which guinea pigs were given which dose level or delivery method. 
-5. The guinea pigs must also be unaware that they are being given a specific treatment.
+The p values for the T-tests are **1.2683007\times 10^{-7}**, **4.397525\times 10^{-14}**, and **1.9064295\times 10^{-5}**. Since these values are all under 0.05, we can disprove the null hypothesis and conclude that dosage **does** have a statistically significant impact on teeth length within the given sample.
 
-## Conclusions
+## Assumptions
 
-1. Supplement type has no effect on tooth growth.
-2. Increasing the dose level leads to increased tooth growth.
+For all these hypothesis tests, we are assuming that our guinea ping subjects represent a population that is IID (independant and identically distributed), and that:
+
+* The guinea pigs are repesentative of the whole population and follow a random sample.
+* Tooth length shows a normal distribution
+* Observations are independent of each other
 
 ## Appendix
 

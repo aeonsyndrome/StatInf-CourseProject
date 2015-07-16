@@ -71,7 +71,7 @@ img {
 
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>In this document, we will investigate the ToothGrowth by performing some basic exploratory data analysis and some statistical inference. By using confidence intervals and/or hypothesis tests to compare tooth growth by <code>supp</code> and <code>dose</code>, we will study the impact of these two variables on tooth growth and present our conclusions, including the assumptions made.</p>
+<p>In this document, we will investigate the ToothGrowth dataset by performing some basic exploratory data analysis and some statistical inference. By using confidence intervals and/or hypothesis tests to compare tooth growth by <code>supp</code> and <code>dose</code>, we will study the impact of these two variables on tooth growth and present our conclusions, including the assumptions made.</p>
 </div>
 <div id="exploring-the-dataset" class="section level2">
 <h2>Exploring the dataset</h2>
@@ -108,54 +108,9 @@ grid.arrange(g1, g2, ncol=2)</code></pre>
 </div>
 <div id="confidence-intervals-and-hypothesis-testing" class="section level2">
 <h2>Confidence Intervals and Hypothesis Testing</h2>
-<p>The next two sections are for analyzing the data for correlation between the delivery method (Dosage and Supplement) and change in tooth growth.</p>
-<div id="dosage-as-a-factor" class="section level3">
-<h3>3.1 Dosage as a Factor</h3>
-<pre class="r"><code>    dose1 &lt;- subset(ToothGrowth, dose %in% c(0.5, 1.0))
-    dose2 &lt;- subset(ToothGrowth, dose %in% c(0.5, 2.0))
-    dose3 &lt;- subset(ToothGrowth, dose %in% c(1.0, 2.0))
-    t.test(len ~ dose, paired = F, var.equal = F, data = dose1)</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  len by dose
-## t = -6.4766, df = 37.986, p-value = 1.268e-07
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  -11.983781  -6.276219
-## sample estimates:
-## mean in group 0.5   mean in group 1 
-##            10.605            19.735</code></pre>
-<pre class="r"><code>    t.test(len ~ dose, paired = F, var.equal = F, data = dose2)</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  len by dose
-## t = -11.799, df = 36.883, p-value = 4.398e-14
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  -18.15617 -12.83383
-## sample estimates:
-## mean in group 0.5   mean in group 2 
-##            10.605            26.100</code></pre>
-<pre class="r"><code>    t.test(len ~ dose, paired = F, var.equal = F, data = dose3)</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  len by dose
-## t = -4.9005, df = 37.101, p-value = 1.906e-05
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  -8.996481 -3.733519
-## sample estimates:
-## mean in group 1 mean in group 2 
-##          19.735          26.100</code></pre>
-<p>The confidence intervals ([-11.98, -6.276] for doses 0.5 and 1.0, [-18.16, -12.83] for doses 0.5 and 2.0, and [-8.996, -3.734] for doses 1.0 and 2.0) allow for the rejection of the null hypothesis and a confirmation that there is a significant correlation between tooth length and dose levels.</p>
-</div>
-<div id="supplement-as-a-factor" class="section level3">
-<h3>3.2 Supplement as a Factor</h3>
-<p>Analyzing the data for correlation between the delivery method and change in tooth growth:</p>
-<pre class="r"><code>    t.test(len ~ supp, paired = F, var.equal = F, data = ToothGrowth)</code></pre>
+<p>The objective of this section is to use confidence intervals and hypothesis testing to prove or disprove the null hypothesis (dosage/supplement have no impact on teeth length). To do so, we will use unpaired T-tests between factors of <code>dose</code> and <code>supp</code>.</p>
+<pre class="r"><code>tt &lt;- t.test(len ~ supp, paired = F, var.equal = F, data = ToothGrowth)
+tt</code></pre>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -167,29 +122,24 @@ grid.arrange(g1, g2, ncol=2)</code></pre>
 ## sample estimates:
 ## mean in group OJ mean in group VC 
 ##         20.66333         16.96333</code></pre>
-<p>A confidence interval of [-0.171, 7.571] does not allow us to reject the null hypothesis (that there is no correlation between delivery method and tooth length).</p>
+<p>In this T-test testing for supplements, while the means are different <strong>(20.66, 16.96)</strong>, we cannot disprove the null hypothesis as the probability under the null hypothesis of obtaining these means is over 5% (p value is <strong>0.061</strong>). Therefore, we can conclude that supplement type <strong>does NOT</strong> have a statistically significant impact on teeth length within the given sample.</p>
+<p>In order to use T tests on the <code>dose</code>, we must split the dataset into pairs of dosages.</p>
+<pre class="r"><code>    dose1 &lt;- subset(ToothGrowth, dose %in% c(0.5, 1.0))
+    dose2 &lt;- subset(ToothGrowth, dose %in% c(0.5, 2.0))
+    dose3 &lt;- subset(ToothGrowth, dose %in% c(1.0, 2.0))
+    t1 &lt;- t.test(len ~ dose, paired = F, var.equal = F, data = dose1)
+    t2 &lt;- t.test(len ~ dose, paired = F, var.equal = F, data = dose2)
+    t3 &lt;- t.test(len ~ dose, paired = F, var.equal = F, data = dose3)</code></pre>
+<p>The p values for the T-tests are <strong>1.268300710<sup>{-7}<strong>, </strong>4.39752510</sup>{-14}</strong>, and <strong>1.906429510^{-5}</strong>. Since these values are all under 0.05, we can disprove the null hypothesis and conclude that dosage <strong>does</strong> have a statistically significant impact on teeth length within the given sample.</p>
 </div>
-</div>
-<div id="conclusions-and-assumptions" class="section level2">
-<h2>4. Conclusions and Assumptions</h2>
-<div id="assumptions" class="section level3">
-<h3>4.1 Assumptions</h3>
-<p>In order to make conclusions with the data in this dataset, we must assume the following:</p>
-<ol style="list-style-type: decimal">
-<li>The poplulations are independent, the variances between populations are different and a random population was used</li>
-<li>The population was comprised of similar guinea pigs, measurement error was accounted for with significant digits, and double blind research methods were used.</li>
-<li>For the populations to be independent, 60 guinea pigs would have to be used so each combination of dose level and delivery method were not affected by the other methods.</li>
-<li>To ensure double blind research methods are followed, the researchers taking the measurements must have been unaware of which guinea pigs were given which dose level or delivery method.</li>
-<li>The guinea pigs must also be unaware that they are being given a specific treatment.</li>
-</ol>
-</div>
-</div>
-<div id="conclusions" class="section level2">
-<h2>Conclusions</h2>
-<ol style="list-style-type: decimal">
-<li>Supplement type has no effect on tooth growth.</li>
-<li>Increasing the dose level leads to increased tooth growth.</li>
-</ol>
+<div id="assumptions" class="section level2">
+<h2>Assumptions</h2>
+<p>For all these hypothesis tests, we are assuming that our guinea ping subjects represent a population that is IID (independant and identically distributed), and that:</p>
+<ul>
+<li>The guinea pigs are repesentative of the whole population and follow a random sample.</li>
+<li>Tooth length shows a normal distribution</li>
+<li>Observations are independent of each other</li>
+</ul>
 </div>
 <div id="appendix" class="section level2">
 <h2>Appendix</h2>
