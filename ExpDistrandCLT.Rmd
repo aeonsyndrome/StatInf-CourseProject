@@ -81,7 +81,6 @@ In the same way as the mean, according to the CLT we expect the standard deviati
 ```{r variance, fig.align='center'}
 # Calculate expected standard error of the mean squared
 SEM2_theoretical <- (sd_theoretical)^2/n
-sd_means <- sqrt(SEM2_theoretical)
 # Calculate true variance
 SEM2_experimental <- var(means_simulated)
 ```
@@ -93,13 +92,14 @@ The expected standard error of the mean squared, and therefore variance of our d
 By overlaying our experimental simulated data with the normal curve defined by `mean = 1/lambda` and `std = standard error of the mean` as shown previously, we get the curve below:
 
 ```{r distribution, fig.align='center'}
-g2 <- ggplot() + ggtitle("Simulated data with CLT-calculated normal curve") + 
-        geom_histogram(aes(x=means_simulated),binwidth=0.1) + geom_density(colour = "green") + 
-        stat_function(fun=dnorm, colour="blue",arg=list(mean=mean_theoretical,sd=sd_means))
+g2 <- ggplot() + theme_bw() + aes(means_simulated) + 
+    geom_histogram(aes(y=..density..), alpha = 0.5, binwidth=0.1) +
+    stat_function(fun=dnorm, args=list(mean=mean_theoretical, sd=mean_theoretical/sqrt(n))) + 
+    labs(title="Distribution of Means", x="Mean", y="Count")
 g2
 ```
 
-The fit shows that the CLT can indeed be applied and we have calculated correct means and variances.
+The fit shows that the CLT can indeed be applied and we have calculated correct means and variances. Therefore, we can conclude that the exponential distribution converges to a normal distribution over a large number of simulations, according to the central limit theorem.
 
 ## Appendix
 

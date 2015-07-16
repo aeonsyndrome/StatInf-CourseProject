@@ -80,7 +80,6 @@ In the same way as the mean, according to the CLT we expect the standard deviati
 ```r
 # Calculate expected standard error of the mean squared
 SEM2_theoretical <- (sd_theoretical)^2/n
-sd_means <- sqrt(SEM2_theoretical)
 # Calculate true variance
 SEM2_experimental <- var(means_simulated)
 ```
@@ -93,29 +92,16 @@ By overlaying our experimental simulated data with the normal curve defined by `
 
 
 ```r
-g2 <- ggplot() + ggtitle("Simulated data with CLT-calculated normal curve") + 
-        geom_histogram(aes(x=means_simulated),binwidth=0.1) + geom_density(colour = "green") + 
-        stat_function(fun=dnorm, colour="blue",arg=list(mean=mean_theoretical,sd=sd_means))
+g2 <- ggplot() + theme_bw() + aes(means_simulated) + 
+    geom_histogram(aes(y=..density..), alpha = 0.5, binwidth=0.1) +
+    stat_function(fun=dnorm, args=list(mean=mean_theoretical, sd=mean_theoretical/sqrt(n))) + 
+    labs(title="Distribution of Means", x="Mean", y="Count")
 g2
 ```
 
 <img src="ExpDistrandCLT_files/figure-html/distribution-1.png" title="" alt="" style="display: block; margin: auto;" />
 
-The fit shows that the CLT can indeed be applied and we have calculated correct means and variances.
-
-Via figures and text, explain how one can tell the distribution is approximately normal. focusing on the difference between the distribution of a large collection of random exponentials and the distribution of a large collection of averages of 40 exponentials.
-
-
-Now in the second portion of the class, we're going to analyze the ToothGrowth data in the R datasets package. 
-Load the ToothGrowth data and perform some basic exploratory data analyses 
-Provide a basic summary of the data.
-Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering)
-State your conclusions and the assumptions needed for your conclusions. 
-Some criteria that you will be evaluated on
-Did you  perform an exploratory data analysis of at least a single plot or table highlighting basic features of the data?
-Did the student perform some relevant confidence intervals and/or tests?
-Were the results of the tests and/or intervals interpreted in the context of the problem correctly? 
-Did the student describe the assumptions needed for their conclusions?
+The fit shows that the CLT can indeed be applied and we have calculated correct means and variances. Therefore, we can conclude that the exponential distribution converges to a normal distribution over a large number of simulations, according to the central limit theorem.
 
 ## Appendix
 
