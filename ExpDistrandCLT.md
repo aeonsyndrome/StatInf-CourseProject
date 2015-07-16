@@ -19,19 +19,19 @@ Below you can see an example of the exponential distribution probability density
 # Show a demo of the exponential distribution
 library(ggplot2)
 x <- seq(0.0,10.0,0.01)
-qplot(x,dexp(x,0.2),geom="line",xlab="x", ylab="exp_dis(x)",main="Exponential distribution example for lambda = 0.2")
+qplot(x,dexp(x,0.2),geom="line",main="Exponential distribution example for lambda = 0.2")
 ```
 
 <img src="ExpDistrandCLT_files/figure-html/demo-1.png" title="" alt="" style="display: block; margin: auto;" />
 
 ## Simulations
 
-In this first part, we will simulate the needed data using `rexp(n, lambda)`. We fix the value `lambda = 0.2`, and start with `n = 40` samples. We will perform `nosims = 1000` experiments. As explained above, the theoretical mean and standard deviation of the distribution is 1/lambda, i.e. 5.
+In this first part, we will simulate the needed data using `rexp(n, lambda)`. We fix the value $lambda = 0.2$, and start with $n = 40$ samples. We will perform $nosims = 1000$ experiments. As explained above, the theoretical mean and standard deviation of the distribution is 1/lambda, i.e. 5.
 
 
 ```r
 # Initialize parameters
-set.seed(7355608)
+set.seed(123)
 nosims <- 1000
 n <- 40
 lambda <- 0.2
@@ -45,21 +45,37 @@ for (i in 1: nosims) {
 }
 ```
 
-
-
 ## Sample Mean versus Theoretical Mean
 
 According to the Central Limit Theorem, with our large number of simulations (1000), we can say: $$\frac{\mbox{Estimate} - \mbox{Mean of Estimate}}{\mbox{Std. Err. of Estimate}} = \frac{\bar X_n - \mu}{\sigma / \sqrt{n}}=\frac{\sqrt n (\bar X_n - \mu)}{\sigma} \longrightarrow N(0, 1)$$
+This translates to the distribution of the sample mean $\bar X_n$ is approximately $N(\mu, \sigma^2/n)$, with:
 
-This translates to the distribution of the sample mean $\bar X_n$ is approximately $N(\mu, \sigma^2/n)$
-	- distribution is centered at the population mean
-	- with standard deviation = standard error of the mean
+* distribution is centered at the population mean
+	
+* with standard deviation = standard error of the mean
+	
+Therefore, we will check if the calculated mean of our average sample exponentials is equal to the theoretical mean 1/lambda, and plot the data with the resulting means below.
 
-`insert figures here`
 
-Include figures with titles. In the figures, highlight the means you are comparing. Include text that explains the figures and what is shown on them, and provides appropriate numbers.
+```r
+# Calculate experimental means
+mean_experimental <- mean(means_simulated)
+
+# Plot data & means
+g <- ggplot() + theme_bw() +
+        geom_histogram(aes(x=means_simulated),binwidth=0.1) +
+        geom_vline(xintercept = mean_experimental, colour = "green") + 
+        geom_vline(xintercept = mean_theorical, colour = "blue")
+g
+```
+
+<img src="ExpDistrandCLT_files/figure-html/means_experiment-1.png" title="" alt="" style="display: block; margin: auto;" />
+
+The experimental mean (green) is **5.0119113**, very close to our expected theoretical (blue) value of **5**, showing that the CLT is indeed valid for our system.
 
 ## Sample Variance versus Theoretical Variance
+
+In the same way as the mean, we 
 
 Include figures (output from R) with titles. Highlight the variances you are comparing. Include text that explains your understanding of the differences of the variances.
 
