@@ -2,6 +2,12 @@
 Leon Duplay  
 16 July 2015  
 
+<style type="text/css">
+h2,h3,h4,h5,h6{
+  font-size: 14pt;
+}
+</style>
+
 ## Overview
 
 In this document, we will investigate the ToothGrowth dataset by performing some basic exploratory data analysis and some statistical inference. By using confidence intervals and/or hypothesis tests to compare tooth growth by `supp` and `dose`, we will study the impact of these two variables on tooth growth and present our conclusions, including the assumptions made.

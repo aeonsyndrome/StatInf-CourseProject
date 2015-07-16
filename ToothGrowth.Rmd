@@ -8,8 +8,14 @@ output:
     fig_height: 3
     fig_width: 10
     keep_md: yes
-    theme: readable
+    theme: united
 ---
+
+<style type="text/css">
+h2,h3,h4,h5,h6{
+  font-size: 14pt;
+}
+</style>
 
 ## Overview
 

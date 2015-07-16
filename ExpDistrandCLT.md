@@ -2,6 +2,12 @@
 Leon Duplay  
 15 July 2015  
 
+<style type="text/css">
+h2,h3,h4,h5,h6{
+  font-size: 14pt;
+}
+</style>
+
 ## Overview
 
 In this document, we will investigate the exponential distribution in R using the Central Limit Theorem.  One key feature of the exponential distribution is that both the mean and standard deviation correspond to `1/lambda`.
